@@ -1,17 +1,32 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h2>{{message}}</h2>
+    <CheeseList v-for="cheese in cheeses" :cheese="cheese"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import axios from 'axios'
+import CheeseList from './components/CheeseList.vue'
+
 
 export default {
   name: 'app',
-  components: {
-    HelloWorld
+  components: { CheeseList },
+  data: function () {
+    return {
+      message: 'All cheeses known to man',
+      cheeses: []
+    }
+  },
+  created: function () {
+    axios.get('http://cheesebored.herokuapp.com/cheeses')
+      .then(res => {
+        this.cheeses = res.data
+        console.log(this.cheeses)
+      })
+
   }
 }
 </script>
